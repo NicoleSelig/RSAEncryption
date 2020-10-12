@@ -1,5 +1,4 @@
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 
 public class RSA {
     
@@ -8,9 +7,9 @@ public class RSA {
     //n = p, q
     
     //Euler Totient function
-    //alpha(n) = (p-1)(q-1)
+    //phi(n) = (p-1)(q-1)
     
-    //chose e with g, d (e, Alpha(n)) = 1
+    //chose e with g, d (e, phi(n)) = 1
     //d = e^ -1 mod alpha(n)
     
     //Bob publishes (e,n)
@@ -26,27 +25,27 @@ public class RSA {
     //10 digit example 
     public static void main (String[] args){
 
-        //will generate random numbers for this later
-        BigInteger p = new BigInteger("2876082342");
-        BigInteger q = new BigInteger("2123633638");
-        
-        Key key = new Key(p,q);
+       //will generate random numbers for this later
+       BigInteger p = new BigInteger("2876082342");
+       BigInteger q = new BigInteger("2123633638");
+       //will generate random numbers for this later
+       
+       Key key = new Key(p,q);
+       key.generateKey();
 
-        key.generateKey();
+       Calculator calc = new Calculator();
+       System.out.println("is PHiOfN Prime?: " + calc.isPrime(key.getPhiOfN())); 
+       System.out.println("PhiOfN: " + key.getPhiOfN());
+       System.out.println("Decryption Key: " + key.getDecryptionKey());
+
+       //bob publishes
+       System.out.println("N: " + key.getN()); //6107745207129020196
+       System.out.println("Encryption Key: " + key.getEncryptionKey()); //5   
     }
     
-    private void encrypt(String m) {
-        //m is an integer < n
-        //how to turn m into an integer
-        //with gcd(M,n) == 1
-        //view as a number in base 36.
-    }
+    
 
-    private String convertToBase36(String str) {
-        byte[] bytes = str.getBytes(StandardCharsets.UTF_8);
-        String base36 = new BigInteger(1, bytes).toString(36);
-        return base36;
-    }
+   
     
 
 
