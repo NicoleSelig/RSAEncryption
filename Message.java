@@ -1,6 +1,4 @@
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 
 public class Message {
 
@@ -13,30 +11,38 @@ public class Message {
         this.m = m;
     }
 
-    public String convertToBase36(String str) throws NumberFormatException {
-        str = str.replaceAll("[^A-Za-z]+", "").toLowerCase();
-        System.out.println(str);
-        int[] num = new int[str.length()];
-        for(int i = 0; i < str.length(); i++){
-            num = str.chars().toArray();
-        }
-        
-        return num.toString();
-    }
-
+    /**
+     * encode
+     * @param m
+     * @return
+     * converts a string to base36
+     */
     public static BigInteger encode(String m) {
        System.out.println(new BigInteger(m, 36).toString());
        return new BigInteger(m, 36);
     }
 
+    /**
+     * decode
+     * @param bInteger
+     * @return
+     * converts a BigInteger number in base36 to it's string value
+     */
     public static String decode(BigInteger bInteger) {
         String string = bInteger.toString(36);
         System.out.println(string);
         return string;
     }
 
-    public String[] fixString(String str) {
-        return str.split("(!?)");
+    /**
+     * fixString
+     * @param str
+     * @return
+     * removes all spaces and punctuation from a string
+     */
+    public String fixString(String str) {
+         String[] string = str.split("(!?)");
+         return string.toString();
     }
 
     public int decrypt(int cypher){
@@ -57,10 +63,4 @@ public class Message {
         return cipherText + "\r\n\r\n" + plainText + "r\n"; 
     }
 
-    public static void main (String [] args){
-
-       BigInteger bi = encode("iamtired");
-       decode(bi);
-       
-    }
 }
