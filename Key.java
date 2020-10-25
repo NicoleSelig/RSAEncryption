@@ -16,7 +16,7 @@ public class Key {
          this.q = q;
     }
 
-    public void generateKey(){
+    public void generateKey() {
         Calculator calc = new Calculator();
         //chooses primes p, q --choose at random 200 digits
         //will generate random numbers for this later

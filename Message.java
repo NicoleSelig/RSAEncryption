@@ -1,5 +1,6 @@
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 public class Message {
 
@@ -12,20 +13,30 @@ public class Message {
         this.m = m;
     }
 
-    private int convertToBase36(String str) {
-        byte[] bytes = str.getBytes(StandardCharsets.UTF_8);
-        String BigIntStr = new BigInteger(1, bytes).toString(36);
-        int base36 = Integer.parseInt(BigIntStr);
-        return base36;
+    public String convertToBase36(String str) throws NumberFormatException {
+        str = str.replaceAll("[^A-Za-z]+", "").toLowerCase();
+        System.out.println(str);
+        int[] num = new int[str.length()];
+        for(int i = 0; i < str.length(); i++){
+            num = str.chars().toArray();
+        }
+        
+        return num.toString();
     }
 
-    public int encrypt(String m) {
-        //her message M is an integer < n
-        //with gcd(M,n) = 1
-        int m36 = convertToBase36(m);
-        //E(m) = M^e mod n
-        cipher = 0;
-        return cipher;
+    public static BigInteger encode(String m) {
+       System.out.println(new BigInteger(m, 36).toString());
+       return new BigInteger(m, 36);
+    }
+
+    public static String decode(BigInteger bInteger) {
+        String string = bInteger.toString(36);
+        System.out.println(string);
+        return string;
+    }
+
+    public String[] fixString(String str) {
+        return str.split("(!?)");
     }
 
     public int decrypt(int cypher){
@@ -44,5 +55,12 @@ public class Message {
     @Override
     public String toString() {
         return cipherText + "\r\n\r\n" + plainText + "r\n"; 
+    }
+
+    public static void main (String [] args){
+
+       BigInteger bi = encode("iamtired");
+       decode(bi);
+       
     }
 }

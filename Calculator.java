@@ -1,12 +1,7 @@
 import java.math.BigInteger;
 
 public class Calculator {
-
-    
-    //how to compute a ^-1 mod b
-    //how to compute gcds
-    //how to test for primes
-    
+  
     public BigInteger add(BigInteger a, BigInteger b) {
         return a.add(b);
     }
@@ -60,7 +55,7 @@ public class Calculator {
      * returns 'true' if the BigInteger is prime
      */
     public Boolean isPrime(BigInteger a) {
-       return a.isProbablePrime(0); //setting certainty as 1 makes sure we are certain
+       return a.isProbablePrime(1); //setting certainty as 1 makes sure we are certain
     }
 
     /**
@@ -89,5 +84,7 @@ public class Calculator {
         }
         return c;
     }
+
+   
 
 }

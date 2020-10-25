@@ -26,21 +26,29 @@ public class RSA {
     public static void main (String[] args){
 
        //will generate random numbers for this later
-       BigInteger p = new BigInteger("2876082342");
-       BigInteger q = new BigInteger("2123633638");
+       BigInteger p = new BigInteger("6376099991"); //2876082342
+       BigInteger q = new BigInteger("6802683781"); //2123633638
        //will generate random numbers for this later
        
        Key key = new Key(p,q);
        key.generateKey();
 
        Calculator calc = new Calculator();
-       System.out.println("is PHiOfN Prime?: " + calc.isPrime(key.getPhiOfN())); 
+       System.out.println("is P Prime?: " + calc.isPrime(p)); 
+       System.out.println("is Q Prime? : " + calc.isPrime(q));
        System.out.println("PhiOfN: " + key.getPhiOfN());
        System.out.println("Decryption Key: " + key.getDecryptionKey());
 
        //bob publishes
        System.out.println("N: " + key.getN()); //6107745207129020196
        System.out.println("Encryption Key: " + key.getEncryptionKey()); //5   
+
+       //message
+       String str = "I am Tired";
+       Message message = new Message(str);
+
+       System.out.println(message.convertToBase36(str));
+
     }
     
     
