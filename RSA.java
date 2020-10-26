@@ -1,61 +1,71 @@
 import java.math.BigInteger;
 
+
+
 public class RSA {
     
-    //key generation
-    //chooses prime p,g
-    //n = p, q
-    
-    //Euler Totient function
-    //phi(n) = (p-1)(q-1)
-    
-    //chose e with g, d (e, phi(n)) = 1
-    //d = e^ -1 mod alpha(n)
-    
-    //Bob publishes (e,n)
-
-
     //ecryptions
-    //E(m) = M^e mod n
+    
     //c the cipher text
 
     //decryption
     //c^d modn = (M^e mod n)^d mod n
 
     //10 digit example 
-    public static void main (String[] args){
-
-       //will generate random numbers for this later
-       BigInteger p = new BigInteger("6376099991"); //2876082342
-       BigInteger q = new BigInteger("6802683781"); //2123633638
-       //will generate random numbers for this later
+    public static void main (String[] args) {
+       Key key = new Key();
        
-       Key key = new Key(p,q);
-       key.generateKey();
+       // Create a private key, and save it to a file.
+       System.out.println("\n\ngenerating keys...");
+       key.generateKeys();
 
-       Calculator calc = new Calculator();
-       System.out.println("is P Prime?: " + calc.isPrime(p)); 
-       System.out.println("is Q Prime? : " + calc.isPrime(q));
-       System.out.println("PhiOfN: " + key.getPhiOfN());
-       System.out.println("Decryption Key: " + key.getDecryptionKey());
+       BigInteger e = key.getEncryptionKey();
+       BigInteger n = key.getN();
+       BigInteger d = key.getDecryptionKey();
+       
+       System.out.println("\n\nencrypting....");
+       BigInteger ciphertext = encrypt("wearetired",n,e);
+       System.out.println("cipherText = " + ciphertext.toString());
+       System.out.println("cipherText to base36 = " + ciphertext.toString(36));
+       System.out.println("\n\ndecrypting..");
+       BigInteger plainBI = decrypt(ciphertext, d, n);
+       System.out.println("plaintext = " + plainBI.toString());
+       System.out.println("plaintext to base36 = " + plainBI.toString(36));
 
-       //bob publishes
-       System.out.println("N: " + key.getN()); //6107745207129020196
-       System.out.println("Encryption Key: " + key.getEncryptionKey()); //5   
-
-       //message
-       String str = "I am Tired";
-       Message message = new Message(str);
-
-       System.out.println(message.convertToBase36(str));
-
+       // Create a public key from a private key, and save it to a file.
+       // Load a key (public or private) from a file specified by the user.
+       // Encrypt/decrypt a text file (using RSA) with the currently loaded key  
     }
-    
-    
 
-   
-    
+    static BigInteger encrypt(String message, BigInteger n, BigInteger e) {
+        //Alice's message M is an integer < n with gcd (M,n) = 1 --highly unlikely but check anyway
+        Message m = new Message(message);
+        Calculator calc = new Calculator();
+        BigInteger bim = m.toBase36();
+        System.out.println(message + " converted to Base36: " + bim.toString());
+       // while (!isGood(bim, n)) {
+            // System.out.println("Message is bigger than the key and not a relative prime");
+            // Key key = new Key();
+            // key.generateKeys();
+            // n = key.getN();
+            // e = key.getEncryptionKey();
+       // }
+        //E(m) = M^e mod n
+        return calc.powerMod(bim, e, n);
+    }
 
+    static BigInteger decrypt(BigInteger c, BigInteger d, BigInteger n) {
+        //c^d modn = (M^e mod n)^d mod n
+        Calculator calc = new Calculator();
+        return calc.powerMod(c, d, n);
+    }
 
-
+    private static boolean isGood(BigInteger m, BigInteger n) {
+        Calculator calc = new Calculator();
+        if ((calc.compare(n, m) == -1) && (calc.gcd(m, n).intValue() == 1))
+        {
+            return true;
+        }
+        else return false;
+    }
 }

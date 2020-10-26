@@ -17,7 +17,5 @@ public class exam2 {
         System.out.println("a^b mod m = " + calc.powerMod(a, b, m));
         System.out.println("ax = b mod m -- x = " + (b.intValue()%m.intValue())/a.intValue() );
 
-        //2
-        System.out.println("2:");
     }
 }

@@ -1,37 +1,42 @@
 import java.math.BigInteger;
+import java.util.Arrays;
 
 public class Message {
 
     String m;
-    int cipher;
     String cipherText;
     String plainText;
 
-    public Message(String m){
+    public Message(String m) {
         this.m = m;
+    }
+
+    public Message(){
+
     }
 
     /**
      * encode
+     * 
      * @param m
-     * @return
-     * converts a string to base36
+     * @return converts a string to base36
      */
-    public static BigInteger encode(String m) {
-       System.out.println(new BigInteger(m, 36).toString());
-       return new BigInteger(m, 36);
+    public BigInteger toBase36() {
+        m = fixString(m);
+        BigInteger base36 = new BigInteger(m, 36);
+        return base36;
     }
 
+    //this still doesnt work properly
     /**
      * decode
      * @param bInteger
      * @return
      * converts a BigInteger number in base36 to it's string value
      */
-    public static String decode(BigInteger bInteger) {
-        String string = bInteger.toString(36);
-        System.out.println(string);
-        return string;
+    public String toBase10(BigInteger bInteger) {
+        BigInteger base10 = new BigInteger(bInteger.toString(), 10);
+        return base10.toString();
     }
 
     /**
@@ -40,14 +45,11 @@ public class Message {
      * @return
      * removes all spaces and punctuation from a string
      */
-    public String fixString(String str) {
-         String[] string = str.split("(!?)");
-         return string.toString();
-    }
+    private String fixString(String m) {
+         String[] string = m.split("(!?)");
+         System.out.println("fixed string: " + String.join("", string).toLowerCase());
 
-    public int decrypt(int cypher){
-        //c^d mod n == (M^e mod n)^d mod n == M ^ ed mod n == M^(1 + k * phi(n) mod n)
-        return 0;
+         return String.join("", string).toLowerCase();
     }
 
     public String getCipherText() {

@@ -48,6 +48,7 @@ public class Calculator {
         return a.gcd(b);  
     }
 
+
     /**
      * isPrime
      * @param a
@@ -82,6 +83,7 @@ public class Calculator {
             case 1: 
                 System.out.println(a + " > " + b);
         }
+        System.out.println(c);
         return c;
     }
 
