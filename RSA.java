@@ -13,15 +13,18 @@ public class RSA {
 
     //10 digit example 
     public static void main (String[] args) {
-       Key key = new Key();
+       KeyGenerator keyGen = new KeyGenerator();
        
        // Create a private key, and save it to a file.
-       System.out.println("\n\ngenerating keys...");
-       key.generateKeys();
+       // Create a public key from a private key, and save it to a file.
+       keyGen.generateKeys();
 
-       BigInteger e = key.getEncryptionKey();
-       BigInteger n = key.getN();
-       BigInteger d = key.getDecryptionKey();
+       BigInteger e = keyGen.getEncryptionKey();
+       BigInteger n = keyGen.getN();
+       BigInteger d = keyGen.getDecryptionKey();
+
+        // Load a key (public or private) from a file specified by the user.
+       // Encrypt/decrypt a text file (using RSA) with the currently loaded key.  
        
        System.out.println("\n\nencrypting....");
        BigInteger ciphertext = encrypt("wearetired",n,e);
@@ -31,10 +34,6 @@ public class RSA {
        BigInteger plainBI = decrypt(ciphertext, d, n);
        System.out.println("plaintext = " + plainBI.toString());
        System.out.println("plaintext to base36 = " + plainBI.toString(36));
-
-       // Create a public key from a private key, and save it to a file.
-       // Load a key (public or private) from a file specified by the user.
-       // Encrypt/decrypt a text file (using RSA) with the currently loaded key  
     }
 
     static BigInteger encrypt(String message, BigInteger n, BigInteger e) {
@@ -60,7 +59,7 @@ public class RSA {
     }
 
     static BigInteger decrypt(BigInteger c, BigInteger d, BigInteger n) {
-        //c^d modn = (M^e mod n)^d mod n
+        //c^d modn
         Calculator calc = new Calculator();
         return calc.powerMod(c, d, n);
     }
