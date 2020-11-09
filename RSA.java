@@ -43,13 +43,18 @@ public class RSA {
         Calculator calc = new Calculator();
         BigInteger bim = m.toBase36();
         System.out.println(message + " converted to Base36: " + bim.toString());
-       // while (!isGood(bim, n)) {
-            // System.out.println("Message is bigger than the key and not a relative prime");
-            // Key key = new Key();
-            // key.generateKeys();
-            // n = key.getN();
-            // e = key.getEncryptionKey();
-       // }
+        
+        if (!isGood(bim, n)){
+            System.out.println("Message is bigger than the key and not a relative prime");
+        }
+        else {
+            System.out.println("Message is smaller than the key and a relative prime! yay!");
+        }
+        // Key key = new Key();
+        // key.generateKeys();
+        // n = key.getN();
+        // e = key.getEncryptionKey();
+        
         //E(m) = M^e mod n
         return calc.powerMod(bim, e, n);
     }
@@ -63,7 +68,9 @@ public class RSA {
     private static boolean isGood(BigInteger m, BigInteger n) {
         Calculator calc = new Calculator();
         if ((calc.compare(n, m) == -1) && (calc.gcd(m, n).intValue() == 1))
-        {
+        { 
+            System.out.println("n > m");
+            System.out.println("gcd = 1");
             return true;
         }
         else return false;
