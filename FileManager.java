@@ -1,4 +1,5 @@
 import java.io.*;
+import java.math.BigInteger;
 
 
 public class FileManager {
@@ -11,6 +12,8 @@ public class FileManager {
             }
             else {
                 System.out.println("File already exists.");
+                deleteFileContent(filename);
+                System.out.println("Deleted File Content");
             }
         }
         catch(IOException e) {
@@ -19,15 +22,8 @@ public class FileManager {
         }
     }
 
-    public void writeStringToFile(String str, String filename){
-        try{
-            FileWriter writer = new FileWriter(filename);
-            writer.write(str);
-            writer.close();
-        }
-        catch(IOException e){
-            System.out.println("Error occured writing to the file.");
-            e.printStackTrace();
-        }
+    private void deleteFileContent(String fileName) throws FileNotFoundException {
+        PrintWriter writer = new PrintWriter(fileName);
+        writer.close();
     }
 }
