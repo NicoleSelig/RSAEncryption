@@ -1,9 +1,13 @@
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Random;
+import java.util.Scanner;
 
 public class KeyGenerator {
 
@@ -65,13 +69,14 @@ public class KeyGenerator {
         try {
             savePrivateKeys("key.privk");
             savePublicKeys("key.pubk");
+            System.out.println("Keys Saved");
         } catch (FileNotFoundException e) {
             System.out.println("could not save keys. file does not exist");
             e.printStackTrace();
         }
     }
 
-    private void savePrivateKeys(String filename) throws FileNotFoundException {
+    private void savePublicKeys(String filename) throws FileNotFoundException {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
             writer.write("n");
@@ -84,13 +89,13 @@ public class KeyGenerator {
             writer.close();
             
         } catch (IOException e) {
-            System.out.println("could not write the keys to a file");
+            System.out.println("could not write public keys to a file");
             e.printStackTrace();
         }
         
     }
 
-    private void savePublicKeys(String filename){
+    private void savePrivateKeys(String filename){
         BufferedWriter writer;
         try {
             writer = new BufferedWriter(new FileWriter(filename));
@@ -111,14 +116,12 @@ public class KeyGenerator {
             writer.write(q.toString());
             writer.close();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+            System.out.println("could not save private keys to file.");
             e.printStackTrace();
         }
     }
 
-    public BigInteger getDecryptionKey() {
-        return decryptionKey;
-    }
+   
 
     public BigInteger getEncryptionKey() {
         return encryptionKey;
