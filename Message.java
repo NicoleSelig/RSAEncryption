@@ -47,7 +47,7 @@ public class Message {
      */
     private String fixString(String m) {
          m = m.replaceAll("[^A-Za-z]+", "").toLowerCase();
-         System.out.println("fixed string: " + m);
+         //System.out.println("fixed string: " + m);
          return m;
     }
 

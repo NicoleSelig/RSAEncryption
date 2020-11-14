@@ -12,6 +12,7 @@ public class RSA {
         KeyGenerator keyGen = new KeyGenerator();
         String fileString = "";
         Message msg;
+        boolean notEnoughDigits = true;
 
         System.out.println("");
         System.out.println("RSA CryptoTool\n");
@@ -26,49 +27,68 @@ public class RSA {
             switch(input){
             case "e":
             case "E":
-                System.out.println("choose Encrypt");
-                System.out.println("How many key digits?");
-                int digits = Integer.parseInt(sc.nextLine());
-                keyGen.generateKeys(digits);
-                KeyPair pubKeys = fm.getPublicKeys();
+                //System.out.println("choose Encrypt");
+
+                //get from user which file they would like to encrypt
                 System.out.println("Which file would you like to encrypt?");
                 fileString = sc.nextLine();
+
+                //get the message from the file
                 msg = new Message(fm.getMessageFromFile(fileString));
+
+                System.out.println("\nYour message is " + msg.biText.toString().length() + " digits in length.");
+
+                System.out.println("\nHow many key digits?");
+                int digits = Integer.parseInt(sc.nextLine());
+
+                //generate all the keys and save them to a file 
+                keyGen.generateKeys(digits);
                 
-                boolean notEnoughDigits = true;
+                //get the public keys
+                KeyPair pubKeys = fm.getPublicKeys();
+ 
+                //make sure that the user made the key large enough to encrypt their file
                 while(notEnoughDigits){
                     if (!isGood(msg.biText, pubKeys.getN())) {
-                        System.out.println("Your message is bigger than the key!\nYour key is " + pubKeys.getN().toString().length() + " digits\nneed more digits...\nwe suggest more than " + msg.biText.toString().length() + " digits for your message..." + "\nHow many digits?");
+                        System.out.println("Your message is bigger than the key!\nYour key is " + pubKeys.getN().toString().length() + " digits\nI suggest more than " + msg.biText.toString().length() + " digits for your key..." + "\nHow many digits?");
                         digits = Integer.parseInt(sc.nextLine());
+
                         keyGen.generateKeys(digits);
                         pubKeys = fm.getPublicKeys();
                     } else {
-                        System.out.println("Message is OK for encryption");
+                        System.out.println("\nMessage is OK for encryption");
                         BigInteger ciphertext = encrypt(msg.getM(), pubKeys.n, pubKeys.k);
                         String cipherString = ciphertext.toString();
+                        
                         fm.createFile("cipher.txt");
                         fm.writeMessageToFile(cipherString, "cipher.txt");
-                        System.out.println("cipherText = " + ciphertext.toString());
+                        //System.out.println("cipherText = " + ciphertext.toString());
+                        
                         notEnoughDigits = false;
                         programRunning = false;
                     }
                 }
-                System.out.println("Message Encrypted. Check your cipher.txt file. Goodbye!");
+                System.out.println("\nMessage Encrypted. Check your cipher.txt file. Goodbye!");
                 break;
             case "d":
             case "D":
-                System.out.println("choose Decrypt");
+                //System.out.println("choose Decrypt");
 
-                System.out.println("Which file would you like to decrypt?");
+                System.out.println("\nWhich file would you like to decrypt?");
                 fileString = sc.nextLine();
                 Message ciphertext = new Message(fm.getBigIntegerFromFile(fileString));
-                System.out.println(ciphertext.cipherText.toString());
+                //System.out.println(ciphertext.cipherText.toString());
 
-                KeyPair privKeys = fm.getPrivateKeys();
+                System.out.println("Enter the name of your keyFile: ");
+                String keyFileStr = sc.nextLine();
+                
+                KeyPair privKeys = fm.getPrivateKeys(keyFileStr);
                 String plaintext = decrypt(ciphertext.cipherText, privKeys.k, privKeys.n);
-                System.out.println(plaintext);
+                //System.out.println(plaintext);
+
                 fm.createFile("plain.txt");
                 fm.writeMessageToFile(plaintext, "plain.txt");
+                
                 System.out.println("Message decrypted. Check your plain.txt file. Goodbye!");
                 programRunning = false;
                 break;
@@ -90,7 +110,7 @@ public class RSA {
       
 
         
-        // Create a private key, and save it to a file.
+        
         // Create a public key from a private key, and save it to a file.
        
 
@@ -111,17 +131,10 @@ public class RSA {
 
     static BigInteger encrypt(String message, BigInteger n, BigInteger e) {
         System.out.println("encrypting....");
-        // Alice's message M is an integer < n with gcd (M,n) = 1 --highly unlikely but
-        // check anyway
         Message m = new Message(message);
         Calculator calc = new Calculator();
         BigInteger bim = m.fromStringtoBI();
-        System.out.println(message + " converted to Base36: " + bim.toString());
-
-        // Key key = new Key();
-        // key.generateKeys();
-        // n = key.getN();
-        // e = key.getEncryptionKey();
+        //System.out.println(message + " converted to Base36: " + bim.toString());
 
         // E(m) = M^e mod n
         return calc.powerMod(bim, e, n);
@@ -133,7 +146,7 @@ public class RSA {
         BigInteger PlainBI = calc.powerMod(c,d,n);
         // c^d modn
         String plaintext = PlainBI.toString(36);
-        System.out.println(plaintext);
+        //System.out.println(plaintext);
         return plaintext;
     }
 
@@ -174,8 +187,7 @@ public class RSA {
         Calculator calc = new Calculator();
         if ((m.compareTo(n) == -1 ) && (calc.gcd(m, n).intValue() == 1))
         { 
-            System.out.println("m < n");
-            System.out.println("gcd = 1");
+            // 
             return true;
         }
         else return false;

@@ -46,7 +46,7 @@ public class Calculator {
      * finds the greatest common divisor of 2 big integers
      */
     public BigInteger gcd(BigInteger a, BigInteger b) {
-        System.out.println("finding the gcd");
+        //System.out.println("finding the gcd");
         return a.gcd(b);  
     }
 
@@ -70,7 +70,7 @@ public class Calculator {
      * (p-1)(q-1)
      */
     public BigInteger eulerTotient(BigInteger p, BigInteger q) {
-       System.out.println("factoring...");
+       //System.out.println("factoring...");
        BigInteger pMinusOne = subtract(p, BigInteger.valueOf(1));
        BigInteger qMinusOne = subtract(q, BigInteger.valueOf(1));
        return multiply(pMinusOne, qMinusOne);
@@ -81,11 +81,11 @@ public class Calculator {
         int c = a.compareTo(b);
         switch(c){
             case -1:
-                System.out.println(a + " < " + b);
+                //System.out.println(a + " < " + b);
             case 0:
-                System.out.println(a + " = " + b);
+                //System.out.println(a + " = " + b);
             case 1: 
-                System.out.println(a + " > " + b);
+                //System.out.println(a + " > " + b);
         }
         System.out.println(c);
         return c;

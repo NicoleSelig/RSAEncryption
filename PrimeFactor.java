@@ -13,9 +13,9 @@ public class PrimeFactor {
     }
     
     private void pollardsRho(BigInteger n){
-        System.out.println("Starting Pollard's Rho");
+        
         if(n.isProbablePrime(20)) {
-            System.out.println("n = " + n.toString());
+            //System.out.println("n = " + n.toString());
             BigInteger p = rho(n);
             pollardsRho(p);
             pollardsRho(n.divide(p));
@@ -34,17 +34,16 @@ public class PrimeFactor {
             return BigInteger.TWO;
         
         do {
-            System.out.println("tortoise....");
+            //System.out.println("tortoise....");
             x = x.multiply(x).mod(n).add(c).mod(n);
 
-            System.out.println("hare...");
+            //System.out.println("hare...");
             y = y.multiply(y).mod(n).add(c).mod(n);
             y = y.multiply(y).mod(n).add(c).mod(n);
 
             //|x-y|
             divisor = x.subtract(y).gcd(n);
         }
-        
         while((divisor.compareTo(n)) == 0);
 
         return divisor;

@@ -16,9 +16,8 @@ public class FileManager {
                 System.out.println("File Created: " + file.getName());
             }
             else {
-                System.out.println("File already exists.");
                 deleteFileContent(filename);
-                System.out.println("Deleted File Content");
+                //System.out.println("Saving to Existing file...");
             }
         }
         catch(IOException e) {
@@ -67,10 +66,10 @@ public class FileManager {
         writer.close();
     }
 
-    public KeyPair getPrivateKeys() throws FileNotFoundException {
+    public KeyPair getPrivateKeys(String filename) throws FileNotFoundException {
         BigInteger n = BigInteger.ZERO;
         BigInteger d = BigInteger.ZERO;
-        Scanner sc = new Scanner(new FileInputStream("key.privk"));
+        Scanner sc = new Scanner(new FileInputStream(filename));
         while (sc.hasNextLine()) {
             String line = sc.nextLine();
             if (line.indexOf("n") != -1) {

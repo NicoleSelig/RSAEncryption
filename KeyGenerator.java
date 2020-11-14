@@ -26,31 +26,33 @@ public class KeyGenerator {
     Random rnd = new Random();
 
     public void generateKeys(int digits) {
-        System.out.println("generating keys..");
+        System.out.println("\ngenerating keys...please wait...");
 
         // keep generating keys as long as the GCD of e and phiOfN is not 1
         while (!gcd.equals(BigInteger.ONE)) {
 
             //convert digits to bitlength estimate
             int bits = (int)(digits*3.2);  //average of 3.2 bits per digit
-            System.out.println("bits = " + bits);
+            //System.out.println("bits = " + bits);
 
-            // generate random 200 digit primes
-            // p = BigInteger.probablePrime(bits,rnd); // a 200 digit number is 668 bits
-            // q = BigInteger.probablePrime(bits, rnd);
-            // // BigInteger p = new BigInteger("2123633639");
-            // // BigInteger q = new BigInteger("2876082343");
+            //generate random 200 digit primes
+            p = BigInteger.probablePrime(bits,rnd); // a 200 digit number is 668 bits
+            q = BigInteger.probablePrime(bits, rnd);
 
-            // // n = p*q
-            // n = calc.multiply(p, q);
+            // BigInteger p = new BigInteger("2123633639");
+            // BigInteger q = new BigInteger("2876082343");
 
-            // // phi(n) = (p-1)(q-1) -- euler totient function
-            // phiOfN = calc.eulerTotient(p, q);
+            // n = p*q
+            n = calc.multiply(p, q);
 
-            n = BigInteger.probablePrime(bits, rnd);
-            PrimeFactor pm = new PrimeFactor(n);
-            p = pm.p;
-            q = pm.q;
+            // phi(n) = (p-1)(q-1) -- euler totient function
+            phiOfN = calc.eulerTotient(p, q);
+
+            //POLLARD's METHOD...MAYBE LATER
+            // n = BigInteger.probablePrime(bits, rnd);
+            // PrimeFactor pm = new PrimeFactor(n);
+            // p = pm.p;
+            // q = pm.q;
 
             // choose a random encryption key
             encryptionKey = BigInteger.probablePrime(3, rnd);
@@ -58,21 +60,16 @@ public class KeyGenerator {
 
             // find the greatest common denominator of (e, phiOfN)
             gcd = calc.gcd(encryptionKey, phiOfN);
-            System.out.println("gcd: \n" + gcd);
-
+           
             if (gcd.intValue() == 1)
                 System.out.println("Keys Are Good!");
             else
-                System.out.println("Inadequate keypairs. Regenerating...");
+                System.out.println("Inadequate keypairs. Regenerating...please wait...");
         }
-        gcd = BigInteger.ZERO;
+        gcd = BigInteger.ZERO; //reinitialize gcd after completion
 
+        //get the decryption key from the encryption key
         decryptionKey = encryptionKey.modInverse(phiOfN);
-
-        // System.out.println("n = \n" + n);
-        // ystem.out.println("phiOfN = \n" + phiOfN);
-        System.out.println("decryption key = " + decryptionKey);
-        System.out.println("encryption key = " + encryptionKey);
 
         //publish keys to respective files
         fm.createFile("key.pubk");
@@ -80,13 +77,14 @@ public class KeyGenerator {
         try {
             savePrivateKeys("key.privk");
             savePublicKeys("key.pubk");
-            System.out.println("Keys Saved");
+            System.out.println("\nKeys Saved\n");
         } catch (FileNotFoundException e) {
             System.out.println("could not save keys. file does not exist");
             e.printStackTrace();
         }
     }
 
+    //save the public key to a file
     private void savePublicKeys(String filename) throws FileNotFoundException {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
@@ -106,6 +104,7 @@ public class KeyGenerator {
         
     }
 
+    //save the private key to a file
     private void savePrivateKeys(String filename){
         BufferedWriter writer;
         try {
