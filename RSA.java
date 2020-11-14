@@ -1,34 +1,41 @@
-import java.io.FileInputStream;
+/**
+ * RSA Class
+ * @author Nicole Selig
+ * main driver class
+ */
 import java.io.FileNotFoundException;
 import java.math.BigInteger;
-import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class RSA {
     
     public static void main(String[] args) throws FileNotFoundException {
         
+        //class imports
         FileManager fm = new FileManager();
         KeyGenerator keyGen = new KeyGenerator();
+
+        //class variables
         String fileString = "";
         Message msg;
         boolean notEnoughDigits = true;
 
+        //welcome
         System.out.println("");
         System.out.println("RSA CryptoTool\n");
         System.out.println("Enter Q anytime to quit program.\n");
         
+        //ask user whether to encrypt or decrypt
         System.out.println("Encrypt (E) or Decrypt(D) ?");
         Scanner sc = new Scanner(System.in);
         String input = sc.nextLine();
 
+        //while running
         boolean programRunning = true;
         while((input != "Q" || input != "q") && programRunning) {
             switch(input){
             case "e":
-            case "E":
-                //System.out.println("choose Encrypt");
-
+            case "E": //Encryption
                 //get from user which file they would like to encrypt
                 System.out.println("Which file would you like to encrypt?");
                 fileString = sc.nextLine();
@@ -71,9 +78,7 @@ public class RSA {
                 System.out.println("\nMessage Encrypted. Check your cipher.txt file. Goodbye!");
                 break;
             case "d":
-            case "D":
-                //System.out.println("choose Decrypt");
-
+            case "D": //Decryption
                 System.out.println("\nWhich file would you like to decrypt?");
                 fileString = sc.nextLine();
                 Message ciphertext = new Message(fm.getBigIntegerFromFile(fileString));
@@ -94,52 +99,34 @@ public class RSA {
                 break;
             }
         }
-        sc.close();
-        
-        // fm.getPublicKeys();
-
-        // System.out.println("Which file did you want to encrypt?");
-        // String filename = sc.nextLine();
-        // Message message = new Message(fm.getMessageFromFile(filename));
-        // BigInteger ciphertext;
-         
-        
-        
-    
-       
-      
-
-        
-        
-        // Create a public key from a private key, and save it to a file.
-       
-
-        // Load a key (public or private) from a file specified by the user.
-     
-        // Encrypt/decrypt a text file (using RSA) with the currently loaded key.
-       
-       
-
-        // BigInteger ciphertext = encrypt("wearetired", n, e);
-        
-        // System.out.println("cipherText to base36 = " + ciphertext.toString(36));
-      
-        
-        // System.out.println("plaintext = " + plainBI.toString());
-        // System.out.println("plaintext to base10 = " + fxMsg.fromBIToString(plainBI));
+        sc.close(); //close scanner
     }
 
+    /**
+     * encrypt
+     * @param message
+     * @param n
+     * @param e
+     * @return
+     * encrypts the message E(m) = M^e mod n
+     */
     static BigInteger encrypt(String message, BigInteger n, BigInteger e) {
         System.out.println("encrypting....");
         Message m = new Message(message);
         Calculator calc = new Calculator();
         BigInteger bim = m.fromStringtoBI();
         //System.out.println(message + " converted to Base36: " + bim.toString());
-
-        // E(m) = M^e mod n
         return calc.powerMod(bim, e, n);
     }
 
+    /**
+     * decrypt
+     * @param c
+     * @param d
+     * @param n
+     * @return
+     * decrypts the message C^d mod n
+     */
     static String decrypt(BigInteger c, BigInteger d, BigInteger n) {
         System.out.println("decrypting..");
         Calculator calc = new Calculator();
@@ -150,39 +137,14 @@ public class RSA {
         return plaintext;
     }
 
-    // // recieves the users choice chooses a crypt
-    // static void chooseCrypt(Scanner sc) {
-    //     FileManager fm = new FileManager();
-    //     String menuItem = sc.next();
-    //     switch(menuItem) {
-    //         case "e":
-    //         case "E":
-    //             System.out.println("choose Encrypt");
-    //             System.out.println("What is the name of the file you want to encrypt?");
-    //             String filename = sc.nextLine();
-    //             Message message = new Message(fm.getMessageFromFile(filename));
-            
-    //             break;
-    //         case "d":
-    //         case "D":
-    //             System.out.println("choose Decrypt");
-    //             break;
-    //         case "q":
-    //         case "Q":
-    //             System.out.println("Good Bye!");
-    //             System.exit(0);
-    //             break;
-    //         default:
-    //             System.out.println("Invalid Choice. Try Again");
-    //             chooseCrypt(sc);
-         
-    // }
-//}
-
-  
-
-  
-
+    /**
+     * isGood
+     * @param m
+     * @param n
+     * @return
+     * checks if the n value is less than the message value, and if the greatest common denomonator
+     * is one
+     */
     private static boolean isGood(BigInteger m, BigInteger n) {
         Calculator calc = new Calculator();
         if ((m.compareTo(n) == -1 ) && (calc.gcd(m, n).intValue() == 1))

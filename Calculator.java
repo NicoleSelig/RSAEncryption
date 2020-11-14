@@ -1,16 +1,36 @@
 import java.math.BigInteger;
-import java.util.Random;
 
 public class Calculator {
   
+    /**
+     * add
+     * @param a
+     * @param b
+     * @return
+     * adds two big integers
+     */
     public BigInteger add(BigInteger a, BigInteger b) {
         return a.add(b);
     }
 
+    /**
+     * subtract
+     * @param a
+     * @param b
+     * @return
+     * subtracts two big integers
+     */
     public BigInteger subtract(BigInteger a, BigInteger b){
         return a.subtract(b);
     }
 
+    /**
+     * multiply
+     * @param a
+     * @param b
+     * @return
+     * multiplies two big integers
+     */
     public BigInteger multiply(BigInteger a, BigInteger b) {
         return a.multiply(b);
     } 
@@ -76,7 +96,13 @@ public class Calculator {
        return multiply(pMinusOne, qMinusOne);
     }
 
-
+    /**
+     * compare
+     * @param a
+     * @param b
+     * @return
+     * compares two big integers
+     */
     public int compare(BigInteger a, BigInteger b){
         int c = a.compareTo(b);
         switch(c){

@@ -1,3 +1,8 @@
+/**KeyPair Class
+ * @author Nicole Selig
+ * keypair constructor class
+ */
+
 import java.math.BigInteger;
 
 public class KeyPair {

@@ -1,30 +1,34 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+/**
+ * KeyGenerator Class
+ * @author Nicole Selig
+ * The Key Generator class handles all of key generation functions. It also saves these keys to a file. 
+ */
+
+import java.util.*;
 import java.math.BigInteger;
-import java.util.Random;
-import java.util.Scanner;
-import java.math.*;
+import java.io.*;
 
 public class KeyGenerator {
-
+    
+    //class variables
     private BigInteger p;
     private BigInteger q;
     private BigInteger phiOfN;
     public BigInteger encryptionKey;
     public BigInteger decryptionKey;
     public BigInteger n;
-
     BigInteger gcd = BigInteger.ZERO;
 
+    //class imports
     FileManager fm = new FileManager();
     Calculator calc = new Calculator();
     Random rnd = new Random();
 
+    /**
+     * generateKeys
+     * @param digits
+     * generates all of the needed keypairs based a on digit input from the user 
+     */
     public void generateKeys(int digits) {
         System.out.println("\ngenerating keys...please wait...");
 
@@ -39,9 +43,6 @@ public class KeyGenerator {
             p = BigInteger.probablePrime(bits,rnd); // a 200 digit number is 668 bits
             q = BigInteger.probablePrime(bits, rnd);
 
-            // BigInteger p = new BigInteger("2123633639");
-            // BigInteger q = new BigInteger("2876082343");
-
             // n = p*q
             n = calc.multiply(p, q);
 
@@ -55,12 +56,11 @@ public class KeyGenerator {
             // q = pm.q;
 
             // choose a random encryption key
-            encryptionKey = BigInteger.probablePrime(3, rnd);
-            // encryptionKey = BigInteger.valueOf(5);
+            encryptionKey = BigInteger.probablePrime(bits, rnd); 
 
+            //verify that the keys can be used
             // find the greatest common denominator of (e, phiOfN)
             gcd = calc.gcd(encryptionKey, phiOfN);
-           
             if (gcd.intValue() == 1)
                 System.out.println("Keys Are Good!");
             else
@@ -83,8 +83,13 @@ public class KeyGenerator {
             e.printStackTrace();
         }
     }
-
-    //save the public key to a file
+    
+    /**
+     * savePublicKeys
+     * @param filename
+     * @throws FileNotFoundException
+     * save the public keys to a file
+     */
     private void savePublicKeys(String filename) throws FileNotFoundException {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
@@ -104,7 +109,11 @@ public class KeyGenerator {
         
     }
 
-    //save the private key to a file
+    /**
+     * savePrivateKeys
+     * @param filename
+     * save the private keys to a file
+     */
     private void savePrivateKeys(String filename){
         BufferedWriter writer;
         try {
@@ -131,15 +140,26 @@ public class KeyGenerator {
         }
     }
 
-
+    /**
+     * getEncryptionKey()
+     * @return
+     */
     public BigInteger getEncryptionKey() {
         return encryptionKey;
     }
 
+    /**
+     * getN
+     * @return
+     */
     public BigInteger getN() {
         return n;
     }
 
+    /**
+     * getPhiOfN()
+     * @return
+     */
     public BigInteger getPhiOfN() {
         return phiOfN;
     }
