@@ -44,7 +44,7 @@ public class Message {
      * @return
      * removes all spaces and punctuation from a string
      */
-    public String fixString(String m) {
+    private String fixString(String m) {
          m = m.replaceAll("[^A-Za-z]+", "").toLowerCase();
          System.out.println("fixed string: " + m);
          return m;

@@ -9,51 +9,67 @@ import java.util.Scanner;
 public class RSA {
     
     public static void main(String[] args) throws FileNotFoundException {
+        
         FileManager fm = new FileManager();
         KeyGenerator keyGen = new KeyGenerator();
-        String [] cipherMenuItems = {"Ceasar Cipher -- C", "Substitution Cipher -- S", "Affine Cipher -- A", "Vigenere Cipher -- V" ,"Home  -- H", "Quit -- Q"};
 
         System.out.println("");
         System.out.println("RSA CryptoTool\n");
         System.out.println("Enter Q anytime to quit program.\n");
+        
         System.out.println("Encrypt (E) or Decrypt(D) ?");
         Scanner sc = new Scanner(System.in);
         String input = sc.nextLine();
 
-        while(input != "Q" || input != "q") {
+        boolean programRunning = true;
+        while((input != "Q" || input != "q") && programRunning) {
             switch(input){
             case "e":
             case "E":
                 System.out.println("choose Encrypt");
-                System.out.println("Which RSA would you like to use?");
+                System.out.println("How many key digits?");
+                int digits = Integer.parseInt(sc.nextLine());
+                keyGen.generateKeys(digits);
+                KeyPair pubKeys = fm.getPublicKeys();
+
+                System.out.println("Which file would you like to encrypt?");
+                String fileString = sc.nextLine();
+                Message msg = new Message(fm.getMessageFromFile(fileString));
+                
+                boolean notEnoughDigits = true;
+                while(notEnoughDigits){
+                    if (!isGood(msg.fromStringtoBI(), pubKeys.getN())) {
+                        System.out.println("Your message is bigger than the key! You need more digits...\nHow many digits?");
+                        digits = Integer.parseInt(sc.nextLine());
+                        notEnoughDigits = true;
+                    } else {
+                        System.out.println("Message is OK for encryption");
+                        BigInteger ciphertext = encrypt(msg.getM(), pubKeys.n, pubKeys.k);
+                        String cipherString = ciphertext.toString();
+                        fm.createFile("cipher.txt");
+                        fm.writeMessageToFile(cipherString, "cipher.txt");
+                        System.out.println("cipherText = " + ciphertext.toString());
+                        notEnoughDigits = false;
+                        programRunning = false;
+                    }
+                }
                 break;
             case "d":
             case "D":
                 System.out.println("choose Decrypt");
                 break;
             }
-
         }
+        sc.close();
         
-        fm.getPublicKeys();
+        // fm.getPublicKeys();
 
-        System.out.println("Which file did you want to encrypt?");
-        String filename = sc.nextLine();
-        Message message = new Message(fm.getMessageFromFile(filename));
-        BigInteger ciphertext;
+        // System.out.println("Which file did you want to encrypt?");
+        // String filename = sc.nextLine();
+        // Message message = new Message(fm.getMessageFromFile(filename));
+        // BigInteger ciphertext;
          
-        if (!isGood(message.fromStringtoBI(), pubKeys.getN())) {
-            System.out.println("Your message is bigger than the key! You need more digits...");
-            digits = sc.nextLine();
-            message = new Message(fm.getMessageFromFile(filename));
-        } else {
-            System.out.println("Message is OK for encryption");
-            ciphertext = encrypt(message.getM(), pubKeys.n, pubKeys.k);
-            String cipherString = ciphertext.toString();
-            fm.createFile("cipher.txt");
-            fm.writeMessageToFile(cipherString, "cipher.txt");
-            System.out.println("cipherText = " + ciphertext.toString());
-        }
+        
         
     
        
@@ -104,34 +120,34 @@ public class RSA {
         return calc.powerMod(c, d, n);
     }
 
-    // recieves the users choice chooses a crypt
-    static void chooseCrypt(Scanner sc) {
-        FileManager fm = new FileManager();
-        String menuItem = sc.next();
-        switch(menuItem) {
-            case "e":
-            case "E":
-                System.out.println("choose Encrypt");
-                System.out.println("What is the name of the file you want to encrypt?");
-                String filename = sc.nextLine();
-                Message message = new Message(fm.getMessageFromFile(filename));
+    // // recieves the users choice chooses a crypt
+    // static void chooseCrypt(Scanner sc) {
+    //     FileManager fm = new FileManager();
+    //     String menuItem = sc.next();
+    //     switch(menuItem) {
+    //         case "e":
+    //         case "E":
+    //             System.out.println("choose Encrypt");
+    //             System.out.println("What is the name of the file you want to encrypt?");
+    //             String filename = sc.nextLine();
+    //             Message message = new Message(fm.getMessageFromFile(filename));
             
-                break;
-            case "d":
-            case "D":
-                System.out.println("choose Decrypt");
-                break;
-            case "q":
-            case "Q":
-                System.out.println("Good Bye!");
-                System.exit(0);
-                break;
-            default:
-                System.out.println("Invalid Choice. Try Again");
-                chooseCrypt(sc);
+    //             break;
+    //         case "d":
+    //         case "D":
+    //             System.out.println("choose Decrypt");
+    //             break;
+    //         case "q":
+    //         case "Q":
+    //             System.out.println("Good Bye!");
+    //             System.exit(0);
+    //             break;
+    //         default:
+    //             System.out.println("Invalid Choice. Try Again");
+    //             chooseCrypt(sc);
          
-    }
-}
+    // }
+//}
 
   
 

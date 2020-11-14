@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Random;
 import java.util.Scanner;
+import java.math.*;
 
 public class KeyGenerator {
 
@@ -24,16 +25,16 @@ public class KeyGenerator {
     Calculator calc = new Calculator();
     Random rnd = new Random();
 
-    public void generateKeys(String digits) {
+    public void generateKeys(int digits) {
         System.out.println("generating keys..");
 
         // keep generating keys as long as the GCD of e and phiOfN is not 1
         while (!gcd.equals(BigInteger.ONE)) {
 
-            //convert digits to bits
-            long longdigit = Long.parseLong(digits);
-            int bits = BigInteger.valueOf(longdigit).bitLength();
-            
+            //convert digits to bitlength estimate
+            int bits = (int)(digits*3.2);  //average of 3.2 bits per digit
+            System.out.println("bits = " + bits);
+
             // generate random 200 digit primes
             p = BigInteger.probablePrime(bits,rnd); // a 200 digit number is 668 bits
             q = BigInteger.probablePrime(bits, rnd);
