@@ -19,7 +19,7 @@ public class KeyGenerator {
     public BigInteger decryptionKey;
     public BigInteger n;
 
-    BigInteger gcd = BigInteger.valueOf(0);
+    BigInteger gcd = BigInteger.ZERO;
 
     FileManager fm = new FileManager();
     Calculator calc = new Calculator();
@@ -36,16 +36,21 @@ public class KeyGenerator {
             System.out.println("bits = " + bits);
 
             // generate random 200 digit primes
-            p = BigInteger.probablePrime(bits,rnd); // a 200 digit number is 668 bits
-            q = BigInteger.probablePrime(bits, rnd);
-            // BigInteger p = new BigInteger("2123633639");
-            // BigInteger q = new BigInteger("2876082343");
+            // p = BigInteger.probablePrime(bits,rnd); // a 200 digit number is 668 bits
+            // q = BigInteger.probablePrime(bits, rnd);
+            // // BigInteger p = new BigInteger("2123633639");
+            // // BigInteger q = new BigInteger("2876082343");
 
-            // n = p*q
-            n = calc.multiply(p, q);
+            // // n = p*q
+            // n = calc.multiply(p, q);
 
-            // phi(n) = (p-1)(q-1) -- euler totient function
-            phiOfN = calc.eulerTotient(p, q);
+            // // phi(n) = (p-1)(q-1) -- euler totient function
+            // phiOfN = calc.eulerTotient(p, q);
+
+            n = BigInteger.probablePrime(bits, rnd);
+            PrimeFactor pm = new PrimeFactor(n);
+            p = pm.p;
+            q = pm.q;
 
             // choose a random encryption key
             encryptionKey = BigInteger.probablePrime(3, rnd);
@@ -60,6 +65,7 @@ public class KeyGenerator {
             else
                 System.out.println("Inadequate keypairs. Regenerating...");
         }
+        gcd = BigInteger.ZERO;
 
         decryptionKey = encryptionKey.modInverse(phiOfN);
 

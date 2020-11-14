@@ -1,4 +1,5 @@
 import java.math.BigInteger;
+import java.util.Random;
 
 public class Calculator {
   
@@ -45,6 +46,7 @@ public class Calculator {
      * finds the greatest common divisor of 2 big integers
      */
     public BigInteger gcd(BigInteger a, BigInteger b) {
+        System.out.println("finding the gcd");
         return a.gcd(b);  
     }
 
@@ -68,10 +70,12 @@ public class Calculator {
      * (p-1)(q-1)
      */
     public BigInteger eulerTotient(BigInteger p, BigInteger q) {
+       System.out.println("factoring...");
        BigInteger pMinusOne = subtract(p, BigInteger.valueOf(1));
        BigInteger qMinusOne = subtract(q, BigInteger.valueOf(1));
        return multiply(pMinusOne, qMinusOne);
     }
+
 
     public int compare(BigInteger a, BigInteger b){
         int c = a.compareTo(b);

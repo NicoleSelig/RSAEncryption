@@ -4,11 +4,13 @@ import java.util.Arrays;
 public class Message {
 
     String m;
-    BigInteger cipherText;
+    BigInteger biText;
     String plainText;
+    BigInteger cipherText;
 
     public Message(String m) {
         this.m = fixString(m);
+        this.biText = fromStringtoBI();
     }
 
     public Message(BigInteger ciphertext){
@@ -22,7 +24,6 @@ public class Message {
      * @return converts a string to base36
      */
     public BigInteger fromStringtoBI() {
-        m = fixString(m);
         BigInteger base36 = new BigInteger(m, 36);
         return base36;
     }

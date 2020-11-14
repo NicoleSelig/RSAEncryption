@@ -31,17 +31,17 @@ public class RSA {
                 int digits = Integer.parseInt(sc.nextLine());
                 keyGen.generateKeys(digits);
                 KeyPair pubKeys = fm.getPublicKeys();
-
                 System.out.println("Which file would you like to encrypt?");
                 fileString = sc.nextLine();
                 msg = new Message(fm.getMessageFromFile(fileString));
                 
                 boolean notEnoughDigits = true;
                 while(notEnoughDigits){
-                    if (!isGood(msg.fromStringtoBI(), pubKeys.getN())) {
-                        System.out.println("Your message is bigger than the key! You need more digits...\nHow many digits?");
+                    if (!isGood(msg.biText, pubKeys.getN())) {
+                        System.out.println("Your message is bigger than the key!\nYour key is " + pubKeys.getN().toString().length() + " digits\nneed more digits...\nwe suggest more than " + msg.biText.toString().length() + " digits for your message..." + "\nHow many digits?");
                         digits = Integer.parseInt(sc.nextLine());
-                        notEnoughDigits = true;
+                        keyGen.generateKeys(digits);
+                        pubKeys = fm.getPublicKeys();
                     } else {
                         System.out.println("Message is OK for encryption");
                         BigInteger ciphertext = encrypt(msg.getM(), pubKeys.n, pubKeys.k);
