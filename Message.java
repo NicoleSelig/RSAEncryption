@@ -12,7 +12,7 @@ public class Message {
     }
 
     public Message(BigInteger ciphertext){
-        this.cipherText = cipherText;
+        this.cipherText = ciphertext;
     }
 
     /**

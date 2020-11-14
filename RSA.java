@@ -4,14 +4,14 @@ import java.math.BigInteger;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
-
-
 public class RSA {
     
     public static void main(String[] args) throws FileNotFoundException {
         
         FileManager fm = new FileManager();
         KeyGenerator keyGen = new KeyGenerator();
+        String fileString = "";
+        Message msg;
 
         System.out.println("");
         System.out.println("RSA CryptoTool\n");
@@ -33,8 +33,8 @@ public class RSA {
                 KeyPair pubKeys = fm.getPublicKeys();
 
                 System.out.println("Which file would you like to encrypt?");
-                String fileString = sc.nextLine();
-                Message msg = new Message(fm.getMessageFromFile(fileString));
+                fileString = sc.nextLine();
+                msg = new Message(fm.getMessageFromFile(fileString));
                 
                 boolean notEnoughDigits = true;
                 while(notEnoughDigits){
@@ -53,10 +53,24 @@ public class RSA {
                         programRunning = false;
                     }
                 }
+                System.out.println("Message Encrypted. Check your cipher.txt file. Goodbye!");
                 break;
             case "d":
             case "D":
                 System.out.println("choose Decrypt");
+
+                System.out.println("Which file would you like to decrypt?");
+                fileString = sc.nextLine();
+                Message ciphertext = new Message(fm.getBigIntegerFromFile(fileString));
+                System.out.println(ciphertext.cipherText.toString());
+
+                KeyPair privKeys = fm.getPrivateKeys();
+                String plaintext = decrypt(ciphertext.cipherText, privKeys.k, privKeys.n);
+                System.out.println(plaintext);
+                fm.createFile("plain.txt");
+                fm.writeMessageToFile(plaintext, "plain.txt");
+                System.out.println("Message decrypted. Check your plain.txt file. Goodbye!");
+                programRunning = false;
                 break;
             }
         }
@@ -113,11 +127,14 @@ public class RSA {
         return calc.powerMod(bim, e, n);
     }
 
-    static BigInteger decrypt(BigInteger c, BigInteger d, BigInteger n) {
+    static String decrypt(BigInteger c, BigInteger d, BigInteger n) {
         System.out.println("decrypting..");
-        // c^d modn
         Calculator calc = new Calculator();
-        return calc.powerMod(c, d, n);
+        BigInteger PlainBI = calc.powerMod(c,d,n);
+        // c^d modn
+        String plaintext = PlainBI.toString(36);
+        System.out.println(plaintext);
+        return plaintext;
     }
 
     // // recieves the users choice chooses a crypt

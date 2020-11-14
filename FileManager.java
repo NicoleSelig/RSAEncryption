@@ -46,7 +46,22 @@ public class FileManager {
         }
         return concatStr;
     }
-
+    
+    public BigInteger getBigIntegerFromFile(String filename){
+        File file = new File (filename);
+        BigInteger n = BigInteger.ZERO;
+    try {
+        Scanner scan = new Scanner(file);
+        while (scan.hasNext()) {
+            n = scan.nextBigInteger();
+        }
+        scan.close();  
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return n;
+    
+    }
     private void deleteFileContent(String fileName) throws FileNotFoundException {
         PrintWriter writer = new PrintWriter(fileName);
         writer.close();

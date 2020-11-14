@@ -28,8 +28,8 @@ public class exam2 {
         BigInteger decryptionKey = e.modInverse(phiOfN);
         System.out.println("decryptionKey = " + decryptionKey);
         RSA rsa = new RSA();
-        BigInteger plain = rsa.decrypt(BigInteger.valueOf(ciphertext), decryptionKey, n);
-        System.out.println(plain.toString(36));
+        //BigInteger plain = rsa.decrypt(BigInteger.valueOf(ciphertext), decryptionKey, n);
+       // System.out.println(plain.toString(36));
 
         e = BigInteger.valueOf(38);
         n = BigInteger.valueOf(55);
