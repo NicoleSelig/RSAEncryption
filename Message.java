@@ -4,15 +4,15 @@ import java.util.Arrays;
 public class Message {
 
     String m;
-    String cipherText;
+    BigInteger cipherText;
     String plainText;
 
     public Message(String m) {
-        this.m = m;
+        this.m = fixString(m);
     }
 
-    public Message(){
-
+    public Message(BigInteger ciphertext){
+        this.cipherText = cipherText;
     }
 
     /**
@@ -21,22 +21,21 @@ public class Message {
      * @param m
      * @return converts a string to base36
      */
-    public BigInteger toBase36() {
+    public BigInteger fromStringtoBI() {
         m = fixString(m);
         BigInteger base36 = new BigInteger(m, 36);
         return base36;
     }
 
-    //this still doesnt work properly
+   
     /**
      * decode
      * @param bInteger
      * @return
      * converts a BigInteger number in base36 to it's string value
      */
-    public String toBase10(BigInteger bInteger) {
-        BigInteger base10 = new BigInteger(bInteger.toString(), 10);
-        return base10.toString();
+    public String fromBIToString(BigInteger bInteger) {
+        return bInteger.toString(36);
     }
 
     /**
@@ -45,14 +44,13 @@ public class Message {
      * @return
      * removes all spaces and punctuation from a string
      */
-    private String fixString(String m) {
-         String[] string = m.split("(!?)");
-         System.out.println("fixed string: " + String.join("", string).toLowerCase());
-
-         return String.join("", string).toLowerCase();
+    public String fixString(String m) {
+         m = m.replaceAll("[^A-Za-z]+", "").toLowerCase();
+         System.out.println("fixed string: " + m);
+         return m;
     }
 
-    public String getCipherText() {
+    public BigInteger getCipherText() {
         return cipherText;
     }
 
@@ -63,6 +61,10 @@ public class Message {
     @Override
     public String toString() {
         return cipherText + "\r\n\r\n" + plainText + "r\n"; 
+    }
+    
+    public String getM() {
+        return m;
     }
 
 }

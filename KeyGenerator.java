@@ -24,15 +24,19 @@ public class KeyGenerator {
     Calculator calc = new Calculator();
     Random rnd = new Random();
 
-    public void generateKeys() {
+    public void generateKeys(String digits) {
         System.out.println("generating keys..");
 
         // keep generating keys as long as the GCD of e and phiOfN is not 1
         while (!gcd.equals(BigInteger.ONE)) {
 
+            //convert digits to bits
+            long longdigit = Long.parseLong(digits);
+            int bits = BigInteger.valueOf(longdigit).bitLength();
+            
             // generate random 200 digit primes
-            p = BigInteger.probablePrime(668, rnd); // a 200 digit number is 668 bits
-            q = BigInteger.probablePrime(668, rnd);
+            p = BigInteger.probablePrime(bits,rnd); // a 200 digit number is 668 bits
+            q = BigInteger.probablePrime(bits, rnd);
             // BigInteger p = new BigInteger("2123633639");
             // BigInteger q = new BigInteger("2876082343");
 
@@ -121,7 +125,6 @@ public class KeyGenerator {
         }
     }
 
-   
 
     public BigInteger getEncryptionKey() {
         return encryptionKey;
